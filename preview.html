@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đề thi tương tác - Giới hạn</title>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background:#f4f7fb;
+    line-height:1.6;
+}
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+h1,h2{
+    color:#004c99;
+}
+.question{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:18px;
+    margin-bottom:20px;
+    background:#fafafa;
+}
+.option{
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    cursor:pointer;
+    transition:0.3s;
+}
+.option:hover{
+    background:#eef5ff;
+}
+.correct{
+    background:#c8f7c5 !important;
+    border:2px solid green;
+}
+.wrong{
+    background:#ffc9c9 !important;
+    border:2px solid red;
+}
+.explanation{
+    margin-top:12px;
+    padding:12px;
+    border-left:5px solid #004c99;
+    background:#eef5ff;
+    display:none;
+}
+.level{
+    color:#b30059;
+    font-weight:bold;
+}
+.score{
+    position:sticky;
+    top:0;
+    background:#004c99;
+    color:white;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Đề Thi Trắc Nghiệm Tương Tác – GIỚI HẠN</h1>
+
+<div class="score">
+Điểm hiện tại: <span id="score">0</span> / 20
+</div>
+
+<h2>Phần I – Lý thuyết (5 câu)</h2>
+
+<div id="quiz"></div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+type:"Lý thuyết",
+level:"Dễ",
+question:"Theo bài giảng DUYMT, giới hạn được hiểu đúng nhất là gì?",
+options:[
+"Giới hạn là một số luôn đạt được.",
+"Giới hạn là điểm kết thúc của phép tính.",
+"Giới hạn là hành trình tiến gần tới một giá trị.",
+"Giới hạn là phép chia vô hạn."
+],
+answer:2,
+explanation:"Giới hạn không nhấn mạnh việc CHẠM tới mà là TIẾN GẦN tới.",
+tip:"Thấy từ 'tiến gần', 'tiệm cận', 'hướng tới' thường liên quan đến giới hạn."
+},
+
+{
+type:"Lý thuyết",
+level:"Dễ",
+question:"Trong định nghĩa epsilon-delta, \\(\\varepsilon\\) biểu thị điều gì?",
+options:[
+"Sai số cho phép",
+"Khoảng cách tới gốc tọa độ",
+"Giá trị của hàm",
+"Đạo hàm"
+],
+answer:0,
+explanation:"\\(\\varepsilon\\) là sai số mong muốn của giá trị hàm.",
+tip:"Epsilon luôn gắn với trục y hay sai số đầu ra."
+},
+
+{
+type:"Lý thuyết",
+level:"Dễ",
+question:"Ẩn dụ bước chân đi một nửa quãng đường còn lại minh họa điều gì?",
+options:[
+"Luôn đến đích sau hữu hạn bước",
+"Tiến gần vô hạn nhưng không chạm",
+"Không bao giờ di chuyển",
+"Giới hạn không tồn tại"
+],
+answer:1,
+explanation:"Mỗi bước còn một nửa nên luôn tiến gần nhưng lý thuyết không chạm.",
+tip:"Nếu mỗi lần giảm còn một nửa thì đang nói về quá trình tiệm cận."
+},
+
+{
+type:"Lý thuyết",
+level:"Trung bình",
+question:"Theo DUYMT, Deconstruction nghĩa là gì?",
+options:[
+"Học thuộc công thức",
+"Tái tạo kiến thức từ logic",
+"Dùng AI làm bài",
+"Giải bài thật nhanh"
+],
+answer:1,
+explanation:"Deconstruction là tự xây dựng lại khái niệm bằng trực giác và logic.",
+tip:"Hãy nhớ: hiểu bản chất > học thuộc."
+},
+
+{
+type:"Lý thuyết",
+level:"Trung bình",
+question:"Trong bài giảng, AI nên được dùng như thế nào?",
+options:[
+"Để chép bài nhanh",
+"Để AI suy nghĩ thay",
+"Để gợi ý và hỗ trợ tư duy",
+"Không được dùng AI"
+],
+answer:2,
+explanation:"Harnessing AI nghĩa là điều khiển AI hỗ trợ tư duy thay vì phụ thuộc.",
+tip:"AI tốt nhất khi đóng vai trò trợ giảng."
+},
+
+// EASY
+{
+type:"Bài tập",
+level:"Dễ",
+question:"Tính \\(\\lim_{x\\to1}(x+2)\\)",
+options:["1","2","3","Không tồn tại"],
+answer:2,
+explanation:"Hàm liên tục nên thay trực tiếp \\(x=1\\): \\(1+2=3\\).",
+tip:"Hàm đa thức → thường thay trực tiếp."
+},
+
+{
+type:"Bài tập",
+level:"Dễ",
+question:"Tính \\(\\lim_{x\\to2}(3x-1)\\)",
+options:["5","6","7","8"],
+answer:0,
+explanation:"Thay trực tiếp: \\(3.2-1=5\\).",
+tip:"Biểu thức tuyến tính luôn liên tục."
+},
+
+{
+type:"Bài tập",
+level:"Dễ",
+question:"Tính \\(\\lim_{x\\to0}x^2\\)",
+options:["0","1","Không tồn tại","Vô cực"],
+answer:0,
+explanation:"\\(0^2=0\\).",
+tip:"Lũy thừa dương của số rất nhỏ vẫn tiến về 0."
+},
+
+{
+type:"Bài tập",
+level:"Dễ",
+question:"Tính \\(\\lim_{x\\to3}(x^2-4)\\)",
+options:["1","3","5","7"],
+answer:2,
+explanation:"\\(3^2-4=9-4=5\\).",
+tip:"Đa thức → thay trực tiếp."
+},
+
+{
+type:"Bài tập",
+level:"Dễ",
+question:"Tính \\(\\lim_{x\\to2}\\frac{x^2-4}{x-2}\\)",
+options:["2","4","6","Không tồn tại"],
+answer:1,
+explanation:"Rút gọn: \\(\\frac{(x-2)(x+2)}{x-2}=x+2\\). Thay \\(x=2\\) được 4.",
+tip:"Gặp 0/0 → thử phân tích nhân tử."
+},
+
+// MEDIUM
+{
+type:"Bài tập",
+level:"Trung bình",
+question:"Tính \\(\\lim_{x\\to1}\\frac{x^2-1}{x-1}\\)",
+options:["1","2","0","Không tồn tại"],
+answer:1,
+explanation:"Rút gọn thành \\(x+1\\), thay \\(x=1\\) được 2.",
+tip:"Hiệu hai bình phương là công cụ cực mạnh."
+},
+
+{
+type:"Bài tập",
+level:"Trung bình",
+question:"Tính \\(\\lim_{x\\to0}\\frac{\\sin x}{x}\\)",
+options:["0","1","-1","Không tồn tại"],
+answer:1,
+explanation:"Đây là giới hạn cơ bản nổi tiếng.",
+tip:"Hãy nhớ nguyên mẫu: sinx/x → 1."
+},
+
+{
+type:"Bài tập",
+level:"Trung bình",
+question:"Tính \\(\\lim_{x\\to\\infty}\\frac{1}{x}\\)",
+options:["0","1","\\infty","Không tồn tại"],
+answer:0,
+explanation:"Mẫu càng lớn thì phân số càng nhỏ và tiến về 0.",
+tip:"Bậc mẫu lớn hơn tử → thường về 0."
+},
+
+{
+type:"Bài tập",
+level:"Trung bình",
+question:"Tính \\(\\lim_{x\\to2}\\frac{x^2+x-6}{x-2}\\)",
+options:["4","5","6","7"],
+answer:1,
+explanation:"Phân tích: \\((x+3)(x-2)/(x-2)=x+3\\). Thay 2 được 5.",
+tip:"Thấy 0/0 → phân tích nhân tử trước."
+},
+
+{
+type:"Bài tập",
+level:"Trung bình",
+question:"Tính \\(\\lim_{x\\to0}\\frac{1-\\cos x}{x^2}\\)",
+options:["0","1/2","1","2"],
+answer:1,
+explanation:"Đây là giới hạn lượng giác cơ bản.",
+tip:"1-cosx thường liên quan tới x²."
+},
+
+// HARD
+{
+type:"Bài tập",
+level:"Khó",
+question:"Tính \\(\\lim_{x\\to\\infty}\\frac{2x^2+3}{x^2-1}\\)",
+options:["0","1","2","\\infty"],
+answer:2,
+explanation:"Chia cả tử và mẫu cho \\(x^2\\), còn \\(\\frac{2+3/x^2}{1-1/x^2}\\to2\\).",
+tip:"Giữ lại bậc cao nhất khi x→∞."
+},
+
+{
+type:"Bài tập",
+level:"Khó",
+question:"Tính \\(\\lim_{x\\to0}\\frac{e^x-1}{x}\\)",
+options:["0","1","e","Không tồn tại"],
+answer:1,
+explanation:"Đây là giới hạn cơ bản của hàm mũ.",
+tip:"(e^x -1)/x → 1 là công thức cần nhớ."
+},
+
+{
+type:"Bài tập",
+level:"Khó",
+question:"Tính \\(\\lim_{x\\to\\infty}\\left(1+\\frac1x\\right)^x\\)",
+options:["1","2","e","\\infty"],
+answer:2,
+explanation:"Đây là định nghĩa số e.",
+tip:"(1+1/n)^n → e."
+},
+
+{
+type:"Bài tập",
+level:"Khó",
+question:"Tính \\(\\lim_{x\\to0}\\frac{\\tan x}{x}\\)",
+options:["0","1","-1","Không tồn tại"],
+answer:1,
+explanation:"Vì \\(\\tan x \\sim x\\) khi x rất nhỏ.",
+tip:"tanx/x và sinx/x đều tiến về 1."
+},
+
+{
+type:"Bài tập",
+level:"Khó",
+question:"Tính \\(\\lim_{x\\to\\infty}\\frac{5x^3-2x}{x^3+1}\\)",
+options:["0","1","5","\\infty"],
+answer:2,
+explanation:"Lấy hệ số của bậc cao nhất: \\(5/1=5\\).",
+tip:"Khi tử và mẫu cùng bậc → lấy tỉ số hệ số đầu."
+}
+
+];
+
+const quiz = document.getElementById("quiz");
+let score = 0;
+
+questions.forEach((q,index)=>{
+
+const div = document.createElement("div");
+div.className = "question";
+
+div.innerHTML = `
+<h3>Câu ${index+1} - <span class="level">${q.level}</span></h3>
+<p><strong>${q.question}</strong></p>
+`;
+
+q.options.forEach((opt,i)=>{
+const btn = document.createElement("div");
+btn.className = "option";
+btn.innerHTML = opt;
+
+btn.onclick = function(){
+
+if(div.dataset.answered) return;
+div.dataset.answered = true;
+
+const options = div.querySelectorAll(".option");
+
+options.forEach((o,idx)=>{
+if(idx===q.answer){
+o.classList.add("correct");
+}
+});
+
+if(i===q.answer){
+btn.classList.add("correct");
+score++;
+document.getElementById("score").innerText = score;
+}else{
+btn.classList.add("wrong");
+}
+
+exp.style.display="block";
+
+};
+
+div.appendChild(btn);
+});
+
+const exp = document.createElement("div");
+exp.className = "explanation";
+exp.innerHTML = `
+<b>Đáp án đúng:</b> ${String.fromCharCode(65+q.answer)}<br><br>
+<b>Giải thích:</b> ${q.explanation}<br><br>
+<b>Mẹo làm nhanh:</b> ${q.tip}
+`;
+
+div.appendChild(exp);
+
+quiz.appendChild(div);
+
+});
+
+</script>
+
+</body>
+</html>
